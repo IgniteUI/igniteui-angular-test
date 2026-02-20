@@ -9,10 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.IGNITEUI_GITHUB_APP_ID }}
+          private-key: ${{ secrets.IGNITEUI_GITHUB_APP_PRIVATE_KEY }}
+          owner: IgniteUI
+          repositories: |
+            igniteui-angular-test
+            igniteui-actions
+
+      - name: Show who we are (sanity check)
+        run: |
+          curl -sS \
+            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/rate_limit
+          
       - name: Send repository dispatch to private repo
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.CLASSIC_PAT_GITHUB }}
+          #token: ${{ secrets.CLASSIC_PAT_GITHUB }}
+          token: ${{ steps.app-token.outputs.token }}
           repository: IgniteUI/igniteui-actions
           event-type: igniteui-angular-public-release-created
           client-payload: |

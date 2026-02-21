@@ -20,12 +20,12 @@ jobs:
             igniteui-angular-test
             igniteui-actions
 
-      - name: Show who we are (sanity check)
+      - name: Inspect the token accepted permissions header on a repo-scoped request
         run: |
           curl -sS \
             -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/rate_limit
+            https://api.github.com/repos/IgniteUI/igniteui-actions
 
       - name: Debug - list repos visible to installation token
         run: |

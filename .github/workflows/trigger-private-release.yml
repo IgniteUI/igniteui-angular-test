@@ -9,45 +9,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
- #     - name: Get app token
- #       id: app-token
- #       uses: actions/create-github-app-token@v2
- #       with:
- #         app-id: ${{ secrets.IGNITEUI_GITHUB_APP_ID }}
- #         private-key: ${{ secrets.IGNITEUI_GITHUB_APP_PRIVATE_KEY }}
- #         owner: IgniteUI
- #         repositories: |
- #           igniteui-angular-test
- #           igniteui-actions
+      - name: Get app token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.IGNITEUI_GITHUB_APP_ID }}
+          private-key: ${{ secrets.IGNITEUI_GITHUB_APP_PRIVATE_KEY }}
+          owner: IgniteUI
+          repositories: |
+            igniteui-angular-test
+            igniteui-actions
 
-#      - name: Inspect the token accepted permissions header on a repo-scoped request
-#        run: |
-#          curl -i \
-#            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
-#            -H "Accept: application/vnd.github+json" \
-#            https://api.github.com/repos/IgniteUI/igniteui-actions
+      - name: Inspect the token accepted permissions header on a repo-scoped request
+        run: |
+          curl -i \
+            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/IgniteUI/igniteui-actions
 
-#      - name: Debug - list repos visible to installation token
-#        run: |
-#          curl -sS \
-#            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
-#            -H "Accept: application/vnd.github+json" \
-#            https://api.github.com/installation/repositories | jq -r '.repositories[].full_name'
+      - name: Debug - list repos visible to installation token
+        run: |
+          curl -sS \
+            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/installation/repositories | jq -r '.repositories[].full_name'
 
-#      - name: Token type sanity check
-#        run: |
-#          curl -i -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
-#            -H "Accept: application/vnd.github+json" \
-#            https://api.github.com/installation/repositories
+      - name: Token type sanity check
+        run: |
+          curl -i -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/installation/repositories
 
-#      - name: Direct repository_dispatch via curl (diagnostic)
-#        run: |
-#          set -euxo pipefail
-#          curl -i -X POST \
-#            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
-#            -H "Accept: application/vnd.github+json" \
-#            https://api.github.com/repos/IgniteUI/igniteui-actions/dispatches \
-#            -d '{"event_type":"igniteui-angular-public-release-created","client_payload":{"release_tag":"'"${{ github.event.release.tag_name }}"'","public_repo":"'"${{ github.repository }}"'"}}'
+      - name: Direct repository_dispatch via curl (diagnostic)
+        run: |
+          set -euxo pipefail
+          curl -i -X POST \
+            -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/IgniteUI/igniteui-actions/dispatches \
+            -d '{"event_type":"igniteui-angular-public-release-created","client_payload":{"release_tag":"'"${{ github.event.release.tag_name }}"'","public_repo":"'"${{ github.repository }}"'"}}'
           
       - name: Send repository dispatch to private repo
         uses: peter-evans/repository-dispatch@v3

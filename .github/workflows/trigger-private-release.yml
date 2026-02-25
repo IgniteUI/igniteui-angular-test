@@ -16,14 +16,10 @@ jobs:
           app-id: ${{ secrets.IGNITEUI_GITHUB_APP_ID }}
           private-key: ${{ secrets.IGNITEUI_GITHUB_APP_PRIVATE_KEY }}
           owner: IgniteUI
-          repositories: |
-            igniteui-angular-test
-            igniteui-actions
 
       - name: Send repository dispatch to private repo
         uses: peter-evans/repository-dispatch@v3
         with:
-          #token: ${{ secrets.CLASSIC_PAT_GITHUB }}
           token: ${{ steps.app-token.outputs.token }}
           repository: IgniteUI/igniteui-actions
           event-type: igniteui-angular-public-release-created
